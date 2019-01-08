@@ -1,0 +1,28 @@
+
+const sch = [
+    {
+	"month": "April",
+	"days": [
+	    {
+		"date": 27,
+		"day": "Saturday",
+		"sit_events": []
+	    },
+	    {
+		"date": 28,
+		"day": "Sunday",
+		"sit_events": []
+	    },
+	    {
+		"date": 29,
+		"day": "Monday",
+		"sit_events": []
+	    },
+	    {
+		"date": 30,
+		"day": "Tuesday",
+		"sit_events": []
+	    }
+	]
+    }
+]

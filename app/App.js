@@ -1,0 +1,114 @@
+
+var DatabaseManager = require('./database/DatabaseManager.js');
+var ScheduleManager = require('./model/ScheduleManager.js');
+var SitEvent = require('./model/SitEvent.js');
+
+module.exports = class App {
+    
+    constructor(appSchedule=new ScheduleManager(3),
+		appDatabase=new DatabaseManager()) {
+	this._appSchedule = appSchedule;
+	this._appDatabase = appDatabase;
+    }
+    get appSchedule() {
+	return this._appSchedule;
+    }
+    get appDatabase() {
+	return this._appDatabase;
+    }
+    getFullSchedule() {
+	return this._appSchedule.getFullSchedule();
+    }
+    getWeekFormat() {
+	return this._appSchedule.getWeekFormat();
+    }
+    getMonthFormat() {
+	return this._appSchedule.getMonthFormat();
+    }
+    getAllSits() {
+	return new Promise((resObj,rejObj) => {
+	    this._appDatabase.getAllSits().then((getResult) => {
+		if (getResult == null) {
+		    resObj(false);
+		} else {
+		    resObj(SitEvent.sqlToJson(getResult));
+		}
+	    }).catch((err) => {
+		console.log(err);
+		rejObj("a database error has occured");
+	    });
+	});
+    }
+    getSpecificSitByJson(jsonParams) {
+	return new Promise((resObj, rejObj) => {
+	    this._appDatabase.getSpecificSitByJson(jsonParams).then((getResult) => {
+		if (getResult == null) {
+                    resObj(false);
+                } else {
+                    resObj(SitEvent.sqlToJson(getResult));
+                }
+	    });
+	}).catch((err) => {
+	    console.log(err);
+	    rejObj("a database error hgas occurred");
+	});
+    }
+    getSpecificSitBy(column, rel, value) {
+	return new Promise((resObj, rejObj) => {
+	    this._appDatabase.getSpecificSitBy(column, rel, value).then((getResult) => {
+                if (getResult == null) {
+                    resObj(false);
+                } else {
+		    resObj(SitEvent.sqlToJson(getResult));
+		}
+            }).catch((err) => {
+		console.log(err);
+                rejObj("a database error has occured");
+            });
+	});
+    }
+    createSit(id,
+	      title,
+	      year,
+	      month,
+	      date,
+	      hour,
+	      duration,
+	      owner,
+	      sitter) {
+
+	if (this._appSchedule.isValidDate(year, month, date)) {
+	    let currentSits = [this._appDatabase.getSpecificSitBy('sitter', '=', owner),
+			       this._appDatabase.getSpecificSitBy('owner', '=', owner)];
+	    for (let userSits of currentSits) {
+		if (userSits) {
+		    for (var sitterSitEvent of sitterCurrentSits) {
+			if (sitterSitEvent.year == year &&
+			    sitterSitEvent.month == month &&
+			    sitterSitEvent.date == date && (sitterSitEvent.hour == sitterSitEvent.hour ||
+							    sitterSitEvent.hour + duration > hour ||
+							    hour + duration > sitterSitEvent.hour
+							   )) {
+			    return false;
+			}
+		    }
+		}
+	    }
+	    this._appDatabase.createSit(id,
+					title,
+					year,
+					month,
+					date,
+					hour,
+					duration,
+					owner,
+					sitter);
+	    return true;
+	} else {
+	    return false;
+	}	    
+    }
+    static monthToInt(month) {
+	return ScheduleManager.monthToInt(month);
+    }
+}

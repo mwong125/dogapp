@@ -1,0 +1,21 @@
+
+import React from 'react';
+import { Container, Row, Col } from 'reactstrap';
+
+export default class HiddenSchedule extends React.Component {
+    constructor(props) {
+	super(props);
+    }
+    componentWillMount() {
+	
+    }
+    render() {
+	return(
+	    <>
+	      <Container>
+		<Row></Row>
+	      </Container>
+	    </>
+	);
+    }
+}

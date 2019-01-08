@@ -1,0 +1,17 @@
+
+const dbInfo = {
+    host: "localhost",
+    user: "root",
+    password: "root",
+    database: "pupup",
+    socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock"
+}
+
+const dbTables = {
+    sits: "sits"
+}
+
+module.exports = {
+    dbInfo: dbInfo,
+    dbTables: dbTables
+};

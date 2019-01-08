@@ -1,0 +1,92 @@
+
+var NodeCalendar = require('node-calendar');
+
+/* Schedule
+ * for now the limits of the schedule will extend for rest of the month plus next month
+ */
+
+const _DAYS = Object.freeze({
+    0: "Monday",
+    1: "Tuesday",
+    2: "Wednesday",
+    3: "Thursday",
+    4: "Friday",
+    5: "Saturday",
+    6: "Sunday"
+});
+
+const _MONTHS = Object.freeze({
+    0: "January",
+    1: "February",
+    2: "March",
+    3: "April",
+    4: "May",
+    5: "June",
+    6: "July",
+    7: "August",
+    8: "September",
+    9: "October",
+    10: "November",
+    11: "December"
+});
+
+module.exports = class Schedule = {
+    
+    constructor(raw_date=new Date(),
+		schedule_length=1, //units of months past current month
+	       ) {
+	this._raw_date = raw_date;
+	this._current_year = raw_date.getFullYear();
+	this._current_month = raw_date.getMonth();
+	this._current_day = raw_date.getDay();
+	this._current_date = raw_date.getDate();
+	this._schedule_length = schedule_length;
+	NodeCalendar.setlocale('en_US');
+
+	/* main schedule json object */
+	this._schedule = new Array(schedule_length+1).fill().map((_,i) => {
+	    var mr = NodeCalendar.monthrange(this._current_year, this._current_ month + i + 1);
+	    var previous_days = (i == 0) ? mr[0] - this._raw_date.getDate() + 1 : 0;
+	    var start_date = (i == 0) ? this._current_date : 1;
+	    return ({
+		"days": new Array(new Array(mr[1] - previous_days).fill().map(_,i) => 
+		"month": Schedule.intToMonth(this._raw_date.getDate())
+	    });
+	});
+	
+    }
+    get current_year() {
+	return this._current_year();
+    }
+    set current_year(year) {
+	this._current_year = year;
+    }
+    get current_month() {
+	return this._current_month;
+    }
+    set current_month(month) {
+	this._current_month = month; 
+    }
+    get current_day() {
+	return this._current_day;
+    }
+    set current_day(day) {
+	this._current_day = day;
+    }
+    update currentTime(raw_date=new Date()) {
+	this._raw_date = raw_date;
+	this.current_year = raw_date.getFullYear();
+	this.current_month = raw_date.getMonth();
+	this.current_day = raw_date.getDay();
+    }
+    
+    /*
+      static helper functions
+    */
+    static intToDay(day) {
+	return _DAYS[day];
+    }
+    static intToMonth(month) {
+	return _MONTHS[month];
+    }
+}
