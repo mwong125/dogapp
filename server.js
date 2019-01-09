@@ -27,16 +27,29 @@ appServer.get('/api/home/sits/:identifier_param/:identifier_value/', (reqObj, re
     });
 });
 
-appServer.get('/api/schedule/date/:month/:date', (reqObj, resObj) => {
+appServer.get('/api/schedule/date/:sitType/:year/:month/:date', (reqObj, resObj) => {
     console.log("got date request for month: " + reqObj.params.month + ", date: " + reqObj.params.date);
-    appPupup.getSpecificSitByJson({
+    appPupup.getSpecificSitByJson(reqObj.params.sitType, {
+	year: reqObj.params.year,
 	month: App.monthToInt(reqObj.params.month),
 	date: reqObj.params.date }).then((getResult) => {
-	    console.log(getResult);
 	    resObj.json(getResult);
 	}).catch((error_message) => {
 	    resObj.status(500).send(error_message);
 	});
+});
+
+appServer.get('/api/schedule/date/:year/:month/:date/', (reqObj, resObj) => {
+    console.log("got date request for month: " + reqObj.params.month + ", date: " + reqObj.params.date);
+    appPupup.getSpecificSitByJsonAllTypes({
+	year: reqObj.params.year,
+	month: App.monthToInt(reqObj.params.month),
+	date: reqObj.params.date
+    }).then((getResult) => {
+	resObj.json(getResult);
+    }).catch((error_message) => {
+	resObj.status(500).send(error_message);
+    });
 });
 
 appServer.get('/api/schedule/format/', (reqObj, resObj) => {
@@ -44,7 +57,6 @@ appServer.get('/api/schedule/format/', (reqObj, resObj) => {
     console.log(appPupup.getMonthFormat());
     let format = { week: appPupup.getWeekFormat(), month: appPupup.getMonthFormat() };
     resObj.json(format);
-    
 });
 
 appServer.get('/api/schedule/', (reqObj, resObj) => {

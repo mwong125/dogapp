@@ -22,12 +22,14 @@ class Schedule extends React.Component {
     }
     toggleSelectedDate(month, date) {
 	console.log("selected date is " + month + " the " + date);
-	fetch('/api/schedule/date/' + month + '/' + date + '/').then(resObj => resObj.json()).then(data => {
+	fetch('/api/schedule/date/2019/' + month + '/' + date + '/').then(resObj => resObj.json()).then(data => {
 	    this.setState({
 		schedule: this.state.schedule,
 		week_format: this.state.week_format,
 		month_format: this.state.month_format,
-		dateEventArray: data
+		dateSitAcceptArray: data.accept,
+		dateSitOfferArray: data.offer,
+		dateSitRequestArray: data.request
 	    });
 	});
     }
@@ -54,24 +56,28 @@ class Schedule extends React.Component {
 		    <Row>
 		      <Col xs="2">
 			<Row>
-			  <ScheduleDay dateEventArray={this.state.dateEventArray}/>
+			  <ScheduleDay
+			    dateSitAcceptArray={this.state.dateSitAcceptArray}
+			    dateSitOfferArray={this.state.dateSitOfferArray}
+			    dateSitRequestArray={this.state.dateSitRequestArray}
+			    />
 			</Row>
 		      </Col>
 		      <Col xs="10">
-		      { (this.state.schedule) ? this.state.schedule.map((month,i) =>{
-			  return(<Row key={i}><ScheduleMonth
-						    passDateInfoUp={this.toggleSelectedDate}
-						    month={month.month}
-						    week_format={this.state.week_format}
-						    month_format={this.state.month_format[i]} />
-				 </Row>);
-		      }) : <></>  }
+			{ (this.state.schedule) ? this.state.schedule.map((month,i) =>{
+			    return(<Row key={i}><ScheduleMonth
+						      passDateInfoUp={this.toggleSelectedDate}
+						      month={month.month}
+						      week_format={this.state.week_format}
+						      month_format={this.state.month_format[i]} />
+				   </Row>);
+ 			}) : <></>  }
 	    </Col>
 		</Row>
 		</Container>
 		</Row>
 		</Container>
-	    </>
+		</>
 	);
     }
     

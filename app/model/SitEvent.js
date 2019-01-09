@@ -33,17 +33,18 @@ module.exports = class SitEvent {
     static sqlToJson(sqlResult) {
 	let sitsArray = new Array();
 	for (let rawSit of sqlResult) {
-                    sitsArray.push({
-                        id: rawSit.id,
-                        title: rawSit.title,
-                        year: rawSit.year,
-                        month: rawSit.month,
-                        date: rawSit.date,
-                        hour: rawSit.hour,
-                        duration: rawSit.duration,
-                        owner: rawSit.owner,
-                        sitter: rawSit.sitter
-                    });
+            sitsArray.push({
+                id: rawSit.id,
+                title: rawSit.title,
+                year: rawSit.year,
+                month: rawSit.month,
+                date: rawSit.date,
+                hour: rawSit.hour,
+                duration: rawSit.duration,
+                owner: rawSit.owner,
+                sitter: rawSit.sitter,
+		animal: rawSit.animal
+	    });
 	}
 	return sitsArray;
     }

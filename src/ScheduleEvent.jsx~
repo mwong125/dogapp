@@ -1,0 +1,50 @@
+
+import React from 'react';
+import styled from 'styled-components';
+import { Container, Col, Row, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Button, ButtonGroup } from 'reactstrap';
+
+let backvar = "rgba(93, 91, 216, .5)";
+
+const StyledScheduleEvent = styled.div`                                                                               
+background: ${backvar};
+width: 2rem; 
+`;
+
+export default class ScheduleEvent extends React.Component {
+    constructor(props) {
+	super(props);
+	this.state = { isOpen: false };
+	this.toggle = this.toggle.bind(this);
+    }
+    toggle() {
+	this.setState({
+	    isOpen: !this.state.isOpen
+	});
+    }
+    render() {
+	let sitEvent =  this.props.sitEvent;
+	return(
+	    <>
+	      <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
+		
+		<StyledScheduleEvent onMouseEnter={this.toggle} style={{
+					 height: (sitEvent.duration*2)+"rem",
+					 marginTop: (sitEvent.hour*2)+"rem",
+					 marginLeft: (this.props.marginLeft*2)+"rem",
+					 position: "absolute"
+					   				       }}>
+		    <DropdownToggle style={{width: "100%", height: "100%", background: "rgba(93, 91, 216, .5)" }}>
+		      
+		    </DropdownToggle>
+		  </StyledScheduleEvent>
+		
+		<DropdownMenu>
+		  <DropdownItem>Sitter: { sitEvent.sitter  }</DropdownItem>
+		  <DropdownItem>Owner: { sitEvent.owner }</DropdownItem>
+		  <DropdownItem>Duration: { sitEvent.duration } </DropdownItem>
+		</DropdownMenu>
+	      </Dropdown>
+	    </>
+	);
+    }
+}

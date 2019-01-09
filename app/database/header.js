@@ -7,7 +7,11 @@ const dbInfo = {
 }
 
 const dbTables = {
-    sits: "sits"
+    sits: {
+	accept: "sit_accepts",
+	offer: "sit_offers",
+	request: "sit_requests"
+    }
 }
 
 module.exports = {
